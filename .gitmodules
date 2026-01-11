@@ -1,0 +1,9 @@
+[submodule "cyber-lms"]
+	path = cyber-lms
+	url = https://github.com/jwalin27/cyber-lms.git
+[submodule "Cyber-phising-game"]
+	path = Cyber-phising-game
+	url = https://github.com/jwalin27/Cyber-phising-game.git
+[submodule "esc"]
+	path = esc
+	url = https://github.com/jwalin27/esc.git
