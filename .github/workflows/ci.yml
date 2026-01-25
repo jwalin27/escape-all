@@ -1,0 +1,114 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  secret_scan:
+    name: Secret Scan (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          args: --verbose --redact
+
+  lint_test_build:
+    name: Lint, Test, Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            esc/esc/package-lock.json
+            cyber-lms/frontend/package-lock.json
+            packages/ui/package-lock.json
+            Cyber-phising-game/package-lock.json
+
+      - name: ESC - install
+        run: npm ci
+        working-directory: esc/esc
+      - name: ESC - lint
+        run: npm run lint
+        working-directory: esc/esc
+      - name: ESC - build
+        run: npm run build
+        working-directory: esc/esc
+
+      - name: UI package - install
+        run: npm ci
+        working-directory: packages/ui
+      - name: UI package - test
+        run: npm run test
+        working-directory: packages/ui
+
+      - name: Cyber LMS frontend - install
+        run: npm ci
+        working-directory: cyber-lms/frontend
+      - name: Cyber LMS frontend - lint
+        run: npm run lint
+        working-directory: cyber-lms/frontend
+      - name: Cyber LMS frontend - build
+        run: npm run build
+        working-directory: cyber-lms/frontend
+      - name: Cyber LMS frontend - test
+        run: npm run test
+        working-directory: cyber-lms/frontend
+
+      - name: Cyber Phishing Game - install
+        run: npm ci
+        working-directory: Cyber-phising-game
+      - name: Cyber Phishing Game - lint
+        run: npm run lint
+        working-directory: Cyber-phising-game
+      - name: Cyber Phishing Game - build
+        run: npm run build
+        working-directory: Cyber-phising-game
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: cyber-lms/go.mod
+      - name: Cyber LMS backend - golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.59.0
+          working-directory: cyber-lms
+
+      - name: Start test database
+        run: docker compose -f cyber-lms/docker-compose.yml up -d db
+
+      - name: Wait for database
+        run: |
+          for i in {1..30}; do
+            if docker compose -f cyber-lms/docker-compose.yml exec -T db pg_isready -U postgres; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Database did not become ready" >&2
+          exit 1
+
+      - name: Cyber LMS backend - tests
+        run: go test ./... -coverprofile=coverage.out
+        working-directory: cyber-lms
+        env:
+          CYBER_LMS_TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/cyber_lms?sslmode=disable
+
+      - name: Cyber LMS backend - coverage
+        run: ./scripts/check_coverage.sh
+        working-directory: cyber-lms
+        env:
+          COVERAGE_MIN: 60

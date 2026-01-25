@@ -1,0 +1,135 @@
+@import "@fontsource/special-elite";
+
+:root {
+  --esc-bg: #ece7dd;
+  --esc-ink: #1a1a1a;
+  --esc-keycap: #f5e0ba;
+  --esc-keycap-ink: #2f1b10;
+  --esc-keycap-border: #ad7c65;
+  --esc-keycap-shadow: #984a39;
+  --esc-keycap-secondary: #eaceaa;
+  --esc-keycap-secondary-border: #b07c55;
+  --esc-keycap-secondary-shadow: #c99f83;
+  --esc-card: #ffffff;
+  --esc-card-border: #d8c7b3;
+}
+
+body {
+  font-family: 'Special Elite', monospace;
+  background-color: var(--esc-bg);
+  color: var(--esc-ink);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.keycap-button {
+  background-color: var(--esc-keycap);
+  color: var(--esc-keycap-ink);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.2rem;
+  border: 2px solid var(--esc-keycap-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 0 0 var(--esc-keycap-shadow), 0 12px 24px rgba(152, 74, 57, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+  text-decoration: none;
+}
+
+.keycap-button:hover {
+  background-color: #f8e5bd;
+  box-shadow: 0 6px 0 0 #b67657, 0 16px 28px rgba(152, 74, 57, 0.24);
+  transform: translateY(-1px);
+}
+
+.keycap-button:focus-visible {
+  outline: 3px solid rgba(152, 74, 57, 0.35);
+  outline-offset: 2px;
+}
+
+.keycap-button:active {
+  background-color: #e1b495;
+  box-shadow: inset 0 2px 4px rgba(47, 26, 17, 0.35);
+  transform: translateY(1px);
+}
+
+.keycap-button--secondary {
+  background-color: var(--esc-keycap-secondary);
+  color: #3a2416;
+  border-color: var(--esc-keycap-secondary-border);
+  box-shadow: 0 4px 0 0 var(--esc-keycap-secondary-shadow), 0 10px 18px rgba(176, 124, 85, 0.18);
+}
+
+.keycap-button--secondary:hover {
+  background-color: #f3d7b2;
+  box-shadow: 0 6px 0 0 #d7a778, 0 14px 22px rgba(176, 124, 85, 0.24);
+}
+
+.keycap-button--secondary:active {
+  background-color: #d7ab7d;
+  box-shadow: inset 0 2px 4px rgba(58, 36, 22, 0.3);
+  transform: translateY(1px);
+}
+
+.keycap-button--nav {
+  padding: 0.45rem 1rem;
+  font-weight: 700;
+}
+
+.ui-input {
+  width: 100%;
+  border-radius: 8px;
+  border: 2px solid var(--esc-card-border);
+  background: #fff9ef;
+  padding: 0.6rem 0.85rem;
+  color: var(--esc-keycap-ink);
+  font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ui-input:focus-visible {
+  outline: 3px solid rgba(152, 74, 57, 0.35);
+  outline-offset: 2px;
+  border-color: #b07c55;
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  font-family: inherit;
+  background: #fff9ef;
+  border: 2px solid var(--esc-card-border);
+  border-radius: 8px;
+  color: var(--esc-keycap-ink);
+  padding: 0.6rem 0.85rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(152, 74, 57, 0.35);
+  outline-offset: 2px;
+  border-color: #b07c55;
+}
+
+.ui-card {
+  background: var(--esc-card);
+  border: 1px solid var(--esc-card-border);
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(58, 36, 22, 0.08);
+}
+
+.ui-modal {
+  background: var(--esc-card);
+  border: 2px solid var(--esc-card-border);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(58, 36, 22, 0.18);
+}
