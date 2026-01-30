@@ -1,6 +1,14 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
+import { createRequire } from 'node:module';
 
-module.exports = {
+const require = createRequire(import.meta.url);
+let defaultTheme;
+try {
+  defaultTheme = require('tailwindcss/defaultTheme');
+} catch (err) {
+  defaultTheme = require(require.resolve('tailwindcss/defaultTheme', { paths: [process.cwd()] }));
+}
+
+export default {
   theme: {
     extend: {
       colors: {
